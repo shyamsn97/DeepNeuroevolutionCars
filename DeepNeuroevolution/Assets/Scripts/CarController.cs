@@ -130,7 +130,7 @@ public class CarController : MonoBehaviour
     {
     	// float fitness = 2000.0f*(1.0f/(Vector3.Distance(transform.position,GameObject.FindGameObjectWithTag("Pick Up").transform.position)));
     	// float fitness = 500000.0f / (((float)GameObject.FindGameObjectWithTag("Goal").transform.position.z - (float)transform.position.z));
-    	float fitness = (float)transform.position.z*1000;
+    	float fitness = (float)transform.position.z*1000f;
     	net.setFitness(fitness);
     	float[,] inputarr = new float[1,9];
     	float velocity = 1500f * motorPower * Time.deltaTime;
@@ -162,7 +162,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,0] = (float)(hit.distance);
+				inputarr[0,0] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -170,7 +170,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,1] = (float)(hit.distance);
+				inputarr[0,1] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -178,7 +178,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,2] = (float)(hit.distance);
+				inputarr[0,2] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -186,7 +186,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,3] = (float)(hit.distance);
+				inputarr[0,3] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -194,7 +194,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,4] = (float)(hit.distance);
+				inputarr[0,4] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -202,7 +202,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,5] = (float)(hit.distance);
+				inputarr[0,5] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -210,7 +210,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,6] = (float)(hit.distance);
+				inputarr[0,6] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -218,7 +218,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,7] = (float)(hit.distance);
+				inputarr[0,7] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -226,7 +226,7 @@ public class CarController : MonoBehaviour
 		{
 			if(hit.collider.tag == "Wall")
 			{
-				inputarr[0,8] = (float)(hit.distance);
+				inputarr[0,8] = (float)(hit.distance) / distance;
 			}
 		}
 
@@ -287,7 +287,7 @@ public class CarController : MonoBehaviour
 		{
 			gameObject.SetActive(false);
 			alive = false;
-			net.addFitness(-1000.0f);
+			net.addFitness(-10000.0f);
 			// net.addFitness((float)(original_life - life));
 		}
 
@@ -312,7 +312,7 @@ public class CarController : MonoBehaviour
 		{
 			gameObject.SetActive(false);
 			alive = false;
-			net.addFitness(-1000.0f);
+			net.addFitness(-10000.0f);
 			// net.addFitness(-life*10.0f);
 			// count = count + 1;
 			// setCountText ();
