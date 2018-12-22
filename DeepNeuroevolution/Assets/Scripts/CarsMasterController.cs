@@ -16,6 +16,7 @@ public class CarsMasterController : MonoBehaviour
 	public Text maxFitness;
 	public Text carsSuccess;
 	public Text totalSuccess;
+	public Text median;
 	// private
 	private int num_successful = 0;
 	private int total_num_successful = 0;
@@ -23,32 +24,17 @@ public class CarsMasterController : MonoBehaviour
 	private GameObject[] carList; 
 	void Start () 
 	{
-		generation.text = "Generation: " + current_gen.ToString();
-		maxFitness.text = "Max Fitness: 0";
+		generation.text = "Generation: " + current_gen.ToString() + "\n";
 		carList = new GameObject[num_cars];
-		// int[] layers = {9,32,8,2};
 		System.Random random = new System.Random();
 		for(int i = 0; i < num_cars; i++)
 		{
 			carList[i] = Instantiate(prefab) as GameObject;
-			// carList[i].GetComponent(MeshRenderer).enabled = false;
-			// GetComponent(MeshRenderer).enabled = false;
 			int rand = random.Next();
 			carList[i].GetComponent<CarController>().assignNet(new NeuralNetwork(layers,rand));
 		}
 	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-		// if(checkAlive() == false)
-		// {
-		// 	resetCars();
-		// 	updateNets();
-		// 	current_gen++;
-		// 	generation.text = "Generation: " + current_gen.ToString();
-		// }
-	}
 	void FixedUpdate()
 	{
 		if(checkAlive() == false)
@@ -56,7 +42,7 @@ public class CarsMasterController : MonoBehaviour
 			resetCars();
 			updateNets();
 			current_gen++;
-			generation.text = "Generation: " + current_gen.ToString();
+			generation.text = "Generation: " + current_gen.ToString() + "\n";
 		}
 	}
 
@@ -98,7 +84,9 @@ public class CarsMasterController : MonoBehaviour
 		}
 		List<NeuralNetwork> nets = getNets();
 		nets.Sort();
-		maxFitness.text = "Max Fitness: 0: " + "\n" + nets[0].getFitness().ToString() + "\n";
+		maxFitness.text = "Top Fitness:\n0: " + nets[0].getFitness().ToString() + "\n";
+		float median_fitness = nets[nets.Count / 2].getFitness();
+		median.text = "Median Fitness: " + median_fitness.ToString() + "\n";
 		for(int i = 1; i < num_elites; i++)
 		{
 			maxFitness.text += i.ToString() + ": " + (nets[i].getFitness().ToString() + "\n");
