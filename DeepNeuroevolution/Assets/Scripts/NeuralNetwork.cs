@@ -7,6 +7,7 @@ public class NeuralNetwork :  IComparable<NeuralNetwork>
 {
 	private List<float[,]> weights = new List<float[,]>();
 	private List<int> seeds = new List<int>();
+	private List<double> stdevs = new List<double>();
 	private float fitness;
 	private int variance = 0;
 
@@ -71,6 +72,11 @@ public class NeuralNetwork :  IComparable<NeuralNetwork>
 		return seeds;
 	}
 
+	public List<double> getStdevs()
+	{
+		return stdevs;
+	}
+
 	public void addSeed(int seed)
 	{
 		seeds.Add(seed);
@@ -91,10 +97,21 @@ public class NeuralNetwork :  IComparable<NeuralNetwork>
         fitness = fit;
     }
 
+    public void reCreate(List<int> seeds, List<double> stdevs)
+    {
+    	initializeWeights(seeds[0]);
+    	for(int i = 1; i < seeds.Count; i++)
+    	{
+    		mutate(seeds[i],stdevs[i-1]);
+    	}
+    }
+
+
 	public void copyParameters(NeuralNetwork net)
 	{
 		copyWeights(net.getWeights());
 		copySeeds(net.getSeeds());
+		copyStdev(net.getStdevs());
 		fitness = net.getFitness();
 	}
 
@@ -115,7 +132,15 @@ public class NeuralNetwork :  IComparable<NeuralNetwork>
 			float[,] new_arr = new float[new_weights[i].GetLength(0),new_weights[i].GetLength(1)];
 			weights.Add(copy(new_arr,new_weights[i]));
 		}
+	}
 
+	public void copyStdev(List<double> newstdev)
+	{
+		stdevs = new List<double>();
+		for(int i = 0; i < newstdev.Count; i++)
+		{
+			stdevs.Add(newstdev[i]);
+		}
 	}
 
 	public float[,] copy(float[,] new_arr, float[,] b)
@@ -232,10 +257,26 @@ public class NeuralNetwork :  IComparable<NeuralNetwork>
     public void mutate(double scaling)
     {
     	System.Random random_seeder = new System.Random();
-    	int seed = random_seeder.Next();
+    	int seed = random_seeder.Next(0,100);
     	addSeed(seed);
     	System.Random random = new System.Random(seed);
     	double std = scaling*Math.Sqrt((double)variance);
+    	stdevs.Add(std);
+    	for (int i = 0; i < this.weights.Count; i++)
+    	{
+    		for(int j = 0; j < this.weights[i].GetLength(0); j++)
+    		{
+    			for(int k = 0; k < this.weights[i].GetLength(1); k++)
+    			{
+    				this.weights[i][j,k] += normSample(random,(1.0/std));
+    			}
+    		}
+    	}
+    }
+
+    public void mutate(int seed,double std)
+    {
+    	System.Random random = new System.Random(seed);
     	for(int i = 0; i < this.weights.Count; i++)
     	{
     		for(int j = 0; j < this.weights[i].GetLength(0); j++)

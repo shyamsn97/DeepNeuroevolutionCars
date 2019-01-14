@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 public class CarsMasterController : MonoBehaviour 
 {
@@ -22,7 +24,10 @@ public class CarsMasterController : MonoBehaviour
 	private int total_num_successful = 0;
 	private int current_gen = 0;
 	private GameObject[] carList; 
-	void Start () 
+	private List<int> elite_seeds = new List<int>();
+	private List<double> elite_stdevs = new List<double>();
+
+	void Start() 
 	{
 		generation.text = "Generation: " + current_gen.ToString() + "\n";
 		carList = new GameObject[num_cars];
@@ -30,9 +35,30 @@ public class CarsMasterController : MonoBehaviour
 		for(int i = 0; i < num_cars; i++)
 		{
 			carList[i] = Instantiate(prefab) as GameObject;
-			int rand = random.Next();
+			int rand = random.Next(0,100);
 			carList[i].GetComponent<CarController>().assignNet(new NeuralNetwork(layers,rand));
 		}
+	}
+
+	public void Quit()
+	{
+		SceneManager.LoadScene("Menu");
+	}
+	
+	public void SaveQuit()
+	{
+		if(elite_seeds.Count > 0)
+		{
+			TextWriter writer = new StreamWriter(File.Create("saved_seeds/elite_seeds.txt"));
+			String s = "";
+			writer.WriteLine(elite_seeds[0].ToString() + "," + "1");
+			for(int i = 1; i < elite_seeds.Count; i++)
+			{
+				writer.WriteLine(elite_seeds[i].ToString() + "," + elite_stdevs[i-1].ToString());
+			}
+			writer.Close();
+		}
+		SceneManager.LoadScene("Menu");
 	}
 
 	void FixedUpdate()
@@ -56,7 +82,6 @@ public class CarsMasterController : MonoBehaviour
 				num_successful++;
 				total_num_successful++;
 			}
-			// carList[i].GetComponent<CarController>().resetPosition();
 		}
 		carsSuccess.text = "Cars Success: " + num_successful.ToString() + "\n";
 		totalSuccess.text = "Total Success: " + total_num_successful.ToString() + "\n";
@@ -84,6 +109,8 @@ public class CarsMasterController : MonoBehaviour
 		}
 		List<NeuralNetwork> nets = getNets();
 		nets.Sort();
+		elite_seeds = nets[0].getSeeds();
+		elite_stdevs = nets[0].getStdevs();
 		maxFitness.text = "Top Fitness:\n0: " + nets[0].getFitness().ToString() + "\n";
 		float median_fitness = nets[nets.Count / 2].getFitness();
 		median.text = "Median Fitness: " + median_fitness.ToString() + "\n";

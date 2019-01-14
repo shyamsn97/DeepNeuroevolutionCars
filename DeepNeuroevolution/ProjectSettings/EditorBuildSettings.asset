@@ -5,7 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: Assets/Scenes/MiniGame.unity
+    guid: 7b8aacc891d194a51971876d02f6d5af
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Menu.unity
+    guid: 514ae43a6b1c04c2db80c43cef75b405
+  - enabled: 1
+    path: Assets/Scenes/NeuroEvolution.unity
+    guid: 98a7f02fa41ea409180aa27a578c5369
+  - enabled: 1
+    path: Assets/Scenes/Demonstrate.unity
+    guid: 26c0ad8705ccc4247a55df3298cad5aa
   m_configObjects: {}
