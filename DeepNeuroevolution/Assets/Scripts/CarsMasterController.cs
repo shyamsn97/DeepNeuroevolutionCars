@@ -26,7 +26,7 @@ public class CarsMasterController : MonoBehaviour
 	private GameObject[] carList; 
 	private List<int> elite_seeds = new List<int>();
 	private List<double> elite_stdevs = new List<double>();
-
+	string m_Path;
 	void Start() 
 	{
 		generation.text = "Generation: " + current_gen.ToString() + "\n";
@@ -49,7 +49,11 @@ public class CarsMasterController : MonoBehaviour
 	{
 		if(elite_seeds.Count > 0)
 		{
-			TextWriter writer = new StreamWriter(File.Create("saved_seeds/elite_seeds.txt"));
+			m_Path = Application.dataPath + "/saved_seeds/";
+			if (!Directory.Exists(m_Path)) {
+				 Directory.CreateDirectory(m_Path);
+			}			
+			TextWriter writer = new StreamWriter(File.Create(m_Path + "elite_seeds.txt"));
 			String s = "";
 			writer.WriteLine(elite_seeds[0].ToString() + "," + "1");
 			for(int i = 1; i < elite_seeds.Count; i++)

@@ -6,6 +6,7 @@ using System.IO;
 
 public class MainMenu : MonoBehaviour 
 {
+	string m_Path;
 
 	public void StartEvolve() 
 	{
@@ -14,7 +15,8 @@ public class MainMenu : MonoBehaviour
 
 	public void StartDemonstrate()
 	{
-		if(File.Exists("saved_seeds/elite_seeds.txt"))
+		m_Path = Application.dataPath;
+		if(File.Exists(m_Path + "/saved_seeds/elite_seeds.txt"))
 		{
 			SceneManager.LoadScene("Demonstrate");
 		}

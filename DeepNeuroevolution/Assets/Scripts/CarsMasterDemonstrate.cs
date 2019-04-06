@@ -17,11 +17,13 @@ public class CarsMasterDemonstrate : MonoBehaviour
 	private int current_gen = 0;
 	private GameObject car; 
 	private List<int> elite_seeds = new List<int>();
-	
+	string m_Path;
+
 	void Start() 
 	{
+		m_Path = Application.dataPath + "/saved_seeds/";
 		NeuralNetwork net = new NeuralNetwork(layers);
-		string[] lines = File.ReadAllLines("saved_seeds/elite_seeds.txt");
+		string[] lines = File.ReadAllLines(m_Path + "elite_seeds.txt");
 		for(int i = 0; i < lines.Length; i++)
 		{
 			string[] values = lines[i].Split(new[]{","}, StringSplitOptions.None);
